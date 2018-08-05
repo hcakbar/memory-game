@@ -2,24 +2,29 @@
  * Create a list that holds all of your cards
  */
 let cardIcons = ["fa fa-diamond", "fa fa-diamond", "fa fa-paper-plane-o", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-anchor", "fa fa-bolt", "fa fa-bolt", "fa fa-cube", "fa fa-cube", "fa fa-leaf", "fa fa-leaf", "fa fa-bicycle", "fa fa-bicycle", "fa fa-bomb", "fa fa-bomb"];
-
+let shuffledCards;
+let cardContainer;
 let openCards = [];
 let matchedCards = [];
-let totalMoves;
+let moves = 0;
+let movesContainer;
+let startTime;
+let endTime;
 let totalTime;
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    console.log('list of cardIcons: ' + cardIcons); //TODO
-    // let shuffledCards = shuffle(cardIcons); //TODO
-    // console.log('Shuffle cardIcons: ' + shuffledCards); //TODO
-    displayCards(cardIcons); //TODO
-
+    init();
+    restart();
 });
+
+function init() {
+    shuffledCards = shuffle(cardIcons);
+    displayCards(shuffledCards);
+}
 
 
 function displayCards(arrays) {
-    const cardContainer = document.querySelector('.deck');
+    cardContainer = document.querySelector('.deck');
 
     for (let i = 0; i < arrays.length; i++) {
         const card = document.createElement('li');
@@ -37,6 +42,8 @@ function click(card) {
     card.addEventListener('click', function () {
         const currentOpenCard = this;
         const previousOpenCard = openCards[0];
+
+        startTime = new Date().getTime();
 
         if (openCards.length === 1) {
             //show open card
@@ -80,14 +87,35 @@ function compareCard(currentOpenCard, previousOpenCard) {
             openCards = [];
         }, 300);
     }
+    //add move
+    movesContainer = document.querySelector('.moves');
+    addMoves(movesContainer);
 }
 
 function isGameOver() {
     setTimeout(function () {
         if (cardIcons.length === matchedCards.length) {
-            alert('Game Over\nHooray! You mated all cards.\nTotal Moves: ' + totalMoves + '.\nTotal Time: ' + totalTime); //TODO
+            endTime = new Date().getTime();
+            totalTime = endTime - startTime;
+            //TODO add to show successful / unsuccessful game
+
+            alert('GAME OVER\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + totalTime / 1000); //TODO
         }
     }, 300)
+}
+
+function restart() {
+    const restartBtn = document.querySelector('.restart');
+    restartBtn.addEventListener('click', function () {
+        cardContainer.innerHTML = "";
+        init();
+        matchedCards = [];
+    })
+}
+
+function addMoves(movesContainer) {
+    moves++;
+    movesContainer.innerHTML = moves;
 }
 
 /*
