@@ -40,7 +40,7 @@ function click(card) {
 
         if (openCards.length === 1) {
             //show open card
-            card.classList.add('open', 'show');
+            card.classList.add('open', 'show', 'disable');
 
             //add open card in array
             openCards.push(this);
@@ -75,8 +75,8 @@ function compareCard(currentOpenCard, previousOpenCard) {
         //don't show if not matched
         console.log("not matched"); //TODO
         setTimeout(function () {
-            currentOpenCard.classList.remove('open', 'show');
-            previousOpenCard.classList.remove('open', 'show');
+            currentOpenCard.classList.remove('open', 'show', 'disable');
+            previousOpenCard.classList.remove('open', 'show', 'disable');
             openCards = [];
         }, 300);
     }
