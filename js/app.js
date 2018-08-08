@@ -1,4 +1,16 @@
 /*
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
+
+
+/*
  * Create a list that holds all of your cards
  */
 let cardIcons = ["fa fa-diamond", "fa fa-diamond", "fa fa-paper-plane-o", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-anchor", "fa fa-bolt", "fa fa-bolt", "fa fa-cube", "fa fa-cube", "fa fa-leaf", "fa fa-leaf", "fa fa-bicycle", "fa fa-bicycle", "fa fa-bomb", "fa fa-bomb"];
@@ -23,7 +35,7 @@ function init() {
     displayCards(shuffledCards);
 }
 
-
+//display the card's symbol
 function displayCards(arrays) {
     cardContainer = document.querySelector('.deck');
 
@@ -38,7 +50,10 @@ function displayCards(arrays) {
     }
 }
 
-//click on card event
+/**
+ set up the event listener for a card. If a card is clicked:
+ click on card event, if the cards do match, lock the cards in the open position, if the cards do not match, remove the cards from the list
+ */
 function click(card) {
     card.addEventListener('click', function () {
         const currentOpenCard = this;
@@ -93,6 +108,7 @@ function compareCard(currentOpenCard, previousOpenCard) {
     addMoves(movesContainer);
 }
 
+// display a message with the final score
 function isGameOver() {
     setTimeout(function () {
         if (cardIcons.length === matchedCards.length) {
@@ -116,6 +132,7 @@ function restart() {
     })
 }
 
+//increment the move counter and display it on the page
 function addMoves(movesContainer) {
     moves++;
     movesContainer.innerHTML = moves;
@@ -172,13 +189,4 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+
