@@ -11,6 +11,7 @@ let movesContainer;
 let startTime;
 let endTime;
 let totalTime;
+let starContainer;
 
 document.addEventListener('DOMContentLoaded', function () {
     init();
@@ -97,9 +98,10 @@ function isGameOver() {
         if (cardIcons.length === matchedCards.length) {
             endTime = new Date().getTime();
             totalTime = endTime - startTime;
-            //TODO add to show successful / unsuccessful game
+            //TODO add modal to show successful / unsuccessful game
 
-            alert('GAME OVER\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + totalTime / 1000); //TODO
+            alert('GAME OVER\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + (totalTime / 1000) + "S");
+            rating(moves);
         }
     }, 300)
 }
@@ -110,12 +112,42 @@ function restart() {
         cardContainer.innerHTML = "";
         init();
         matchedCards = [];
+        starContainer.innerHTML = "";
     })
 }
 
 function addMoves(movesContainer) {
     moves++;
     movesContainer.innerHTML = moves;
+}
+
+function rating(moves) {
+    starContainer = document.querySelector('.stars');
+    if (moves === 8) {
+        //TODO make it better
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 8 && moves < 11) {
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 10 && moves < 16) {
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 15 && moves < 21) {
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 20) {
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>';
+    } else if (moves === 0) {
+        starContainer.innerHTML = "";
+    }
+
 }
 
 /*
