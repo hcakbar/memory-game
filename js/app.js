@@ -129,6 +129,7 @@ function restart() {
         init();
         matchedCards = [];
         starContainer.innerHTML = "";
+        //TODO add to reset moves to 0
     })
 }
 
