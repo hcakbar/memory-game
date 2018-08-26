@@ -78,6 +78,7 @@ function click(card) {
             //add open card in array
             openCards.push(this);
         }
+        rating(moves);
     })
 }
 
@@ -104,8 +105,7 @@ function compareCard(currentOpenCard, previousOpenCard) {
         }, 300);
     }
     //add move
-    movesContainer = document.querySelector('.moves');
-    addMoves(movesContainer);
+    addMoves();
 }
 
 // display a message with the final score
@@ -116,8 +116,7 @@ function isGameOver() {
             totalTime = endTime - startTime;
             //TODO add modal to show successful / unsuccessful game
 
-            alert('GAME OVER\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + (totalTime / 1000) + "S");
-            rating(moves);
+            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + (totalTime / 1000) + "S");
         }
     }, 300)
 }
@@ -128,44 +127,36 @@ function restart() {
         cardContainer.innerHTML = "";
         init();
         matchedCards = [];
-        starContainer.innerHTML = "";
-        //TODO add to reset moves to 0
+        // starContainer.innerHTML = "";
+        moves = 0;
+        movesContainer.innerHTML = moves;
+        rating(moves);
     })
 }
 
 //increment the move counter and display it on the page
-function addMoves(movesContainer) {
+function addMoves() {
     moves++;
+    movesContainer = document.querySelector('.moves');
     movesContainer.innerHTML = moves;
 }
 
 function rating(moves) {
     starContainer = document.querySelector('.stars');
-    if (moves === 8) {
-        //TODO make it better
-        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 8 && moves < 11) {
-        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 10 && moves < 16) {
-        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 15 && moves < 21) {
-        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
-            '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 20) {
-        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>';
-    } else if (moves === 0) {
+    //TODO make it better
+    if (moves <= 9) {
         starContainer.innerHTML = "";
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 9 && moves < 15) {
+        starContainer.innerHTML = "";
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+            '<li><i class="fa fa-star"></i></li>';
+    } else if (moves > 15) {
+        starContainer.innerHTML = "";
+        starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>';
     }
-
 }
 
 /*
