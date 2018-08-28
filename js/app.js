@@ -20,10 +20,12 @@ let openCards = [];
 let matchedCards = [];
 let moves = 0;
 let movesContainer;
-let startTime;
 let endTime;
-let totalTime;
 let starContainer;
+
+let totalSeconds = 0;
+let timeInt = 0;
+let timer;
 
 document.addEventListener('DOMContentLoaded', function () {
     init();
@@ -31,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function init() {
+    movesContainer = document.querySelector('.moves');
+    timer = document.querySelector('.timer');
+    timer.innerHTML = '00:00';
+
     shuffledCards = shuffle(cardIcons);
     displayCards(shuffledCards);
 }
@@ -59,7 +65,7 @@ function click(card) {
         const currentOpenCard = this;
         const previousOpenCard = openCards[0];
 
-        startTime = new Date().getTime();
+        timeInt = setInterval(startTimer, 1000);
 
         if (openCards.length === 1) {
             //show open card
@@ -97,7 +103,6 @@ function compareCard(currentOpenCard, previousOpenCard) {
         isGameOver();
     } else {
         //don't show if not matched
-        console.log("not matched"); //TODO
         setTimeout(function () {
             currentOpenCard.classList.remove('open', 'show', 'disable');
             previousOpenCard.classList.remove('open', 'show', 'disable');
@@ -112,11 +117,11 @@ function compareCard(currentOpenCard, previousOpenCard) {
 function isGameOver() {
     setTimeout(function () {
         if (cardIcons.length === matchedCards.length) {
+            stopTimer();
             endTime = new Date().getTime();
-            totalTime = endTime - startTime;
             //TODO add modal to show successful / unsuccessful game
 
-            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ' + (totalTime / 1000) + "S");
+            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ');
         }
     }, 300)
 }
@@ -127,17 +132,15 @@ function restart() {
         cardContainer.innerHTML = "";
         init();
         matchedCards = [];
-        // starContainer.innerHTML = "";
-        moves = 0;
-        movesContainer.innerHTML = moves;
-        rating(moves);
+        movesContainer.innerHTML = '0';
+        rating(0);
+        resetTimer();
     })
 }
 
 //increment the move counter and display it on the page
 function addMoves() {
     moves++;
-    movesContainer = document.querySelector('.moves');
     movesContainer.innerHTML = moves;
 }
 
@@ -157,6 +160,29 @@ function rating(moves) {
         starContainer.innerHTML = "";
         starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>';
     }
+}
+
+//Timer
+function startTimer() {
+    ++totalSeconds;
+
+    function addZero(i) {
+        return (i < 10) ? `0` + i : i;
+    }
+
+    let min = addZero(Math.floor(totalSeconds / 60));
+    let sec = addZero(totalSeconds - (min * 60));
+    timer.innerHTML = min + ':' + sec;
+}
+
+function resetTimer() {
+    clearInterval(timeInt);
+    totalSeconds = 0;
+    timer.innerHTML = '00:00';
+}
+
+function stopTimer() {
+    clearInterval(timeInt)
 }
 
 /*
