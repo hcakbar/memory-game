@@ -26,6 +26,7 @@ let starContainer;
 let totalSeconds = 0;
 let timeInt = 0;
 let timer;
+let currentTimeTook;
 
 document.addEventListener('DOMContentLoaded', function () {
     init();
@@ -62,10 +63,15 @@ function displayCards(arrays) {
  */
 function click(card) {
     card.addEventListener('click', function () {
+        moves++;
+
         const currentOpenCard = this;
         const previousOpenCard = openCards[0];
 
-        timeInt = setInterval(startTimer, 1000);
+        //Timer on only first click
+        if (moves === 1) {
+            timeInt = setInterval(startTimer, 1000);
+        }
 
         if (openCards.length === 1) {
             //show open card
@@ -121,7 +127,7 @@ function isGameOver() {
             endTime = new Date().getTime();
             //TODO add modal to show successful / unsuccessful game
 
-            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '.\nTotal Time: ');
+            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '\nTotal Time: ' + currentTimeTook + ' mm:ss');
         }
     }, 300)
 }
@@ -135,12 +141,12 @@ function restart() {
         movesContainer.innerHTML = '0';
         rating(0);
         resetTimer();
+        stopTimer();
     })
 }
 
 //increment the move counter and display it on the page
 function addMoves() {
-    moves++;
     movesContainer.innerHTML = moves;
 }
 
@@ -164,7 +170,7 @@ function rating(moves) {
 
 //Timer
 function startTimer() {
-    ++totalSeconds;
+   totalSeconds ++;
 
     function addZero(i) {
         return (i < 10) ? `0` + i : i;
@@ -172,7 +178,8 @@ function startTimer() {
 
     let min = addZero(Math.floor(totalSeconds / 60));
     let sec = addZero(totalSeconds - (min * 60));
-    timer.innerHTML = min + ':' + sec;
+    currentTimeTook = min + ':' + sec;
+    timer.innerHTML = currentTimeTook;
 }
 
 function resetTimer() {
