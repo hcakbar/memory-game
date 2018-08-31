@@ -20,13 +20,13 @@ let openCards = [];
 let matchedCards = [];
 let moves = 0;
 let movesContainer;
-let endTime;
 let starContainer;
 
 let totalSeconds = 0;
 let timeInt = 0;
 let timer;
 let currentTimeTook;
+let cardCliced = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
     init();
@@ -38,8 +38,8 @@ function init() {
     timer = document.querySelector('.timer');
     timer.innerHTML = '00:00';
 
-    shuffledCards = shuffle(cardIcons);
-    displayCards(shuffledCards);
+    // shuffledCards = shuffle(cardIcons);
+    displayCards(cardIcons);
 }
 
 //display the card's symbol
@@ -63,13 +63,11 @@ function displayCards(arrays) {
  */
 function click(card) {
     card.addEventListener('click', function () {
-        moves++;
-
         const currentOpenCard = this;
         const previousOpenCard = openCards[0];
 
         //Timer on only first click
-        if (moves === 1) {
+        if (cardCliced === 1) {
             timeInt = setInterval(startTimer, 1000);
         }
 
@@ -91,6 +89,7 @@ function click(card) {
             openCards.push(this);
         }
         rating(moves);
+        cardCliced++;
     })
 }
 
@@ -124,10 +123,10 @@ function isGameOver() {
     setTimeout(function () {
         if (cardIcons.length === matchedCards.length) {
             stopTimer();
-            endTime = new Date().getTime();
-            //TODO add modal to show successful / unsuccessful game
 
-            alert('CONGRATULATIONS\nHooray! You matched all cards.\nTotal Moves: ' + moves + '\nTotal Time: ' + currentTimeTook + ' mm:ss');
+
+            gameModal();
+            // alert('\n ' + moves + '\n' + currentTimeTook + ' mm:ss');
         }
     }, 300)
 }
@@ -147,11 +146,12 @@ function restart() {
 
 //increment the move counter and display it on the page
 function addMoves() {
+    moves++;
     movesContainer.innerHTML = moves;
 }
 
-function rating(moves) {
     starContainer = document.querySelector('.stars');
+function rating(moves) {
     //TODO make it better
     if (moves <= 9) {
         starContainer.innerHTML = "";
@@ -170,7 +170,7 @@ function rating(moves) {
 
 //Timer
 function startTimer() {
-   totalSeconds ++;
+    totalSeconds++;
 
     function addZero(i) {
         return (i < 10) ? `0` + i : i;
@@ -214,4 +214,39 @@ function shuffle(array) {
     return array;
 }
 
+/* Modal: https://www.w3schools.com/howto/howto_css_modals.asp */
+function gameModal() {
+    let modal = document.getElementById('modal');
+    let modalContent = document.getElementById('modal-content');
+    // let openBtn = document.getElementById('modal-button');
+    let replayBtn = document.getElementById('modal-restart');
+
+    let moveString = 'Total Moves: ' + moves;
+    // let starString = 'Rating: ' + stars;
+    let timeString = 'Total Time: ' + currentTimeTook + ' mm:ss';
+    modalContent.innerHTML =
+        '<p>Congratulation! You matched all the cards!</p>' +
+        '<p>' + moveString + '</p>' +
+        '                <p>' + timeString + '</p>' +
+     '<span>Rating: </span>' + starContainer.innerHTML;
+
+
+    modal.style.display = 'block';
+
+    // openBtn.onclick = function () {
+    //     modal.style.display = 'block';
+    // }
+
+    replayBtn.onclick = function () {
+        modal.style.display = 'none';
+        restart();
+    }
+
+    window.onclick = function (event) {
+        if (event.target != modal) {
+            modal.style.display == 'none';
+        }
+    }
+
+}
 
