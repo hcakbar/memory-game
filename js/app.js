@@ -14,19 +14,20 @@
  * Create a list that holds all of your cards
  */
 let cardIcons = ["fa fa-diamond", "fa fa-diamond", "fa fa-paper-plane-o", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-anchor", "fa fa-bolt", "fa fa-bolt", "fa fa-cube", "fa fa-cube", "fa fa-leaf", "fa fa-leaf", "fa fa-bicycle", "fa fa-bicycle", "fa fa-bomb", "fa fa-bomb"];
+
 let shuffledCards;
 let cardContainer;
 let openCards = [];
 let matchedCards = [];
 let moves = 0;
 let movesContainer;
-let starContainer;
+let starContainer = document.querySelector('.stars');
 
 let totalSeconds = 0;
 let timeInt = 0;
 let timer;
 let currentTimeTook;
-let cardCliced = 1;
+let cardClicked = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
     init();
@@ -38,8 +39,8 @@ function init() {
     timer = document.querySelector('.timer');
     timer.innerHTML = '00:00';
 
-    // shuffledCards = shuffle(cardIcons);
-    displayCards(cardIcons);
+    shuffledCards = shuffle(cardIcons);
+    displayCards(shuffledCards);
 }
 
 //display the card's symbol
@@ -67,7 +68,7 @@ function click(card) {
         const previousOpenCard = openCards[0];
 
         //Timer on only first click
-        if (cardCliced === 1) {
+        if (cardClicked === 0) {
             timeInt = setInterval(startTimer, 1000);
         }
 
@@ -89,7 +90,7 @@ function click(card) {
             openCards.push(this);
         }
         rating(moves);
-        cardCliced++;
+        cardClicked++;
     })
 }
 
@@ -97,7 +98,6 @@ function compareCard(currentOpenCard, previousOpenCard) {
     //compare two open cards
     if (currentOpenCard.innerHTML === previousOpenCard.innerHTML) {
         //show if matched
-        console.log("matched"); //TODO
         currentOpenCard.classList.add('match');
         previousOpenCard.classList.add('match');
 
@@ -123,10 +123,7 @@ function isGameOver() {
     setTimeout(function () {
         if (cardIcons.length === matchedCards.length) {
             stopTimer();
-
-
             gameModal();
-            // alert('\n ' + moves + '\n' + currentTimeTook + ' mm:ss');
         }
     }, 300)
 }
@@ -134,14 +131,20 @@ function isGameOver() {
 function restart() {
     const restartBtn = document.querySelector('.restart');
     restartBtn.addEventListener('click', function () {
-        cardContainer.innerHTML = "";
-        init();
-        matchedCards = [];
-        movesContainer.innerHTML = '0';
-        rating(0);
-        resetTimer();
-        stopTimer();
+        resetGame();
     })
+}
+
+function resetGame() {
+    cardContainer.innerHTML = "";
+    init();
+    matchedCards = [];
+    movesContainer.innerHTML = '0';
+    rating(0);
+    resetTimer();
+    stopTimer();
+    cardClicked = 0;
+    moves = 0;
 }
 
 //increment the move counter and display it on the page
@@ -150,19 +153,18 @@ function addMoves() {
     movesContainer.innerHTML = moves;
 }
 
-    starContainer = document.querySelector('.stars');
 function rating(moves) {
     //TODO make it better
-    if (moves <= 9) {
+    if (moves <= 10) {
         starContainer.innerHTML = "";
         starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
             '<li><i class="fa fa-star"></i></li>' +
             '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 9 && moves < 15) {
+    } else if (moves > 10 && moves < 16) {
         starContainer.innerHTML = "";
         starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>' +
             '<li><i class="fa fa-star"></i></li>';
-    } else if (moves > 15) {
+    } else if (moves > 16) {
         starContainer.innerHTML = "";
         starContainer.innerHTML = '<li><i class="fa fa-star"></i></li>';
     }
@@ -214,7 +216,6 @@ function shuffle(array) {
     return array;
 }
 
-/* Modal: https://www.w3schools.com/howto/howto_css_modals.asp */
 function gameModal() {
     let modal = document.getElementById('modal');
     let modalContent = document.getElementById('modal-content');
@@ -222,31 +223,20 @@ function gameModal() {
     let replayBtn = document.getElementById('modal-restart');
 
     let moveString = 'Total Moves: ' + moves;
-    // let starString = 'Rating: ' + stars;
-    let timeString = 'Total Time: ' + currentTimeTook + ' mm:ss';
+    let timeString = 'Total Time: ' + currentTimeTook;
     modalContent.innerHTML =
-        '<p>Congratulation! You matched all the cards!</p>' +
+        '<p>Congratulations! You matched all the cards!</p>' +
         '<p>' + moveString + '</p>' +
-        '                <p>' + timeString + '</p>' +
-     '<span>Rating: </span>' + starContainer.innerHTML;
-
+        '<span>Rating: </span>' + starContainer.innerHTML +
+        '<p>' + timeString + '</p>';
 
     modal.style.display = 'block';
 
-    // openBtn.onclick = function () {
-    //     modal.style.display = 'block';
-    // }
-
-    replayBtn.onclick = function () {
+    replayBtn.addEventListener('click', function () {
         modal.style.display = 'none';
-        restart();
-    }
 
-    window.onclick = function (event) {
-        if (event.target != modal) {
-            modal.style.display == 'none';
-        }
-    }
-
+        moves = 0;
+        resetGame();
+    })
 }
 
