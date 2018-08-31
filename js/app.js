@@ -219,7 +219,6 @@ function shuffle(array) {
 function gameModal() {
     let modal = document.getElementById('modal');
     let modalContent = document.getElementById('modal-content');
-    // let openBtn = document.getElementById('modal-button');
     let replayBtn = document.getElementById('modal-restart');
 
     let moveString = 'Total Moves: ' + moves;
