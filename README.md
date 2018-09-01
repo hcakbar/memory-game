@@ -10,3 +10,13 @@ Each turn:
 * If the cards do not match, both cards are flipped face down.
 
 The game ends once all cards have been correctly matched.
+
+## Build With 
+* JavaScript
+* Bootstrap
+* HTML
+* CSS
+
+## Resources
+* Shuffle function from http://stackoverflow.com/a/2450976
+* Google API fonts https://fonts.googleapis.com/css?family=Coda
