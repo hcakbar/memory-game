@@ -22,7 +22,7 @@ let shuffledCards;
 let cardContainer;
 let openCards = [];
 let matchedCards = [];
-let moves = 0;
+const moves = 0;
 let movesContainer;
 let starContainer = document.querySelector('.stars');
 
@@ -79,12 +79,13 @@ function click(card) {
             //show open card
             card.classList.add('open', 'show', 'disable');
 
-            //add open card in array
-            openCards.push(this);
+            if (currentOpenCard != previousOpenCard) {
+                //add open card in array
+                openCards.push(this);
 
-            //compare card
-            compareCard(currentOpenCard, previousOpenCard);
-
+                //compare card
+                compareCard(currentOpenCard, previousOpenCard);
+            }
         } else {
             //show open card
             currentOpenCard.classList.add('open', 'show');
