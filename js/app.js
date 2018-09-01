@@ -22,7 +22,7 @@ let shuffledCards;
 let cardContainer;
 let openCards = [];
 let matchedCards = [];
-const moves = 0;
+let moves = 0;
 let movesContainer;
 let starContainer = document.querySelector('.stars');
 
